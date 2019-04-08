@@ -1,57 +1,66 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, NativeModules, Platform, TouchableOpacity, AppState, DeviceEventEmitter, PermissionsAndroid } from 'react-native';
+import {
+  StyleSheet,
+  Text, 
+  View, 
+  NativeModules, 
+  TouchableOpacity, 
+  AppState, 
+  DeviceEventEmitter, 
+  PermissionsAndroid
+} from 'react-native';
 
 
-
+const { LocationSettings } = NativeModules;
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = { appState: AppState };
   }
   componentDidMount() {
-    NativeModules.Counter._startListen();
+    LocationSettings._startListen();
     AppState.addEventListener('change', this._handleAppStateChange);
     // this.checkLocationSettings();
 
     DeviceEventEmitter.addListener('locationProviderStatusChange', (locationStatus) => {
       console.warn("gps listener has chhanged", locationStatus)
-  })
+    })
   }
 
   openLocationSettings = () => {
-    NativeModules.Counter.openLocationSettings();
+    LocationSettings.openLocationSettings();
   }
   openGPSSettings = () => {
-    NativeModules.Counter.openGPSSettings();
+    LocationSettings.openGPSSettings();
   }
   componentWillUnmount() {
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
   _handleAppStateChange = (nextAppState) => {
-    if ( nextAppState === 'active') {
+    if (nextAppState === 'active') {
       this.setState({ appState: nextAppState });
-    } 
+    }
     // this.checkLocationSettings();
 
   };
 
   checkLocationSettings = () => {
-    NativeModules.Counter.isLocationEnabled((gps)=>{
+    LocationSettings.isLocationEnabled((gps) => {
       PermissionsAndroid
-      .check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
-      .then(location=>{
-        if(!location && !gps){
-          this.openGPSSettings();
-          this.openLocationSettings();
-        }else if(!location && gps){
-          this.openLocationSettings();
-        }else if(location && !gps){
-          this.openGPSSettings();
-        }
-  
-      })
+        .check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
+        .then(location => {
+          if (!location && !gps) {
+            this.openGPSSettings();
+            this.openLocationSettings();
+          } else if (!location && gps) {
+            this.openLocationSettings();
+          } else if (location && !gps) {
+            this.openGPSSettings();
+          }
+
+        })
     })
-   
+
   }
   render() {
     // Platform.OS === 'android' ? NativeModules.Counter.show(res => console.warn(res)) : console.warn(NativeModules.Counter)
