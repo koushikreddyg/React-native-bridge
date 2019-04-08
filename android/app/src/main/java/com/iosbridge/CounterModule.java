@@ -1,27 +1,17 @@
 package com.iosbridge;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.Settings;
-import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
-import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
-import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 public class CounterModule extends ReactContextBaseJavaModule {
@@ -55,8 +45,7 @@ public class CounterModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void openLocationSettings() {
-        Intent intent = new Intent();
-        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", reactContext.getPackageName(), null);
         intent.setData(uri);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
