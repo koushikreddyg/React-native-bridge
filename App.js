@@ -9,57 +9,60 @@ import {
   DeviceEventEmitter, 
   PermissionsAndroid
 } from 'react-native';
+import TouchId from 'react-native-touch-id';
 
 
-const { LocationSettings } = NativeModules;
+// const { LocationSettings } = NativeModules;
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = { appState: AppState };
   }
   componentDidMount() {
-    LocationSettings._startListen();
-    AppState.addEventListener('change', this._handleAppStateChange);
-    // this.checkLocationSettings();
+    TouchId.authenticate().then((res)=>{console.warn(res)}).catch(res=>console.warn(res))
+    // LocationSettings._startListen();
+    // AppState.addEventListener('change', this._handleAppStateChange);
+    // // this.checkLocationSettings();
 
-    DeviceEventEmitter.addListener('locationProviderStatusChange', (locationStatus) => {
-      console.warn("gps listener has chhanged", locationStatus)
-    })
+    // DeviceEventEmitter.addListener('locationProviderStatusChange', (locationStatus) => {
+    //   console.warn("gps listener has chhanged", locationStatus)
+    // })
   }
 
   openLocationSettings = () => {
-    LocationSettings.openLocationSettings();
+    // LocationSettings.openLocationSettings();
   }
   openGPSSettings = () => {
-    LocationSettings.openGPSSettings();
+    // LocationSettings.openGPSSettings();
   }
   componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange);
+    // AppState.removeEventListener('change', this._handleAppStateChange);
   }
   _handleAppStateChange = (nextAppState) => {
-    if (nextAppState === 'active') {
-      this.setState({ appState: nextAppState });
-    }
+    // if (nextAppState === 'active') {
+    //   this.setState({ appState: nextAppState });
+    // }
     // this.checkLocationSettings();
 
   };
 
   checkLocationSettings = () => {
-    LocationSettings.isLocationEnabled((gps) => {
-      PermissionsAndroid
-        .check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
-        .then(location => {
-          if (!location && !gps) {
-            this.openGPSSettings();
-            this.openLocationSettings();
-          } else if (!location && gps) {
-            this.openLocationSettings();
-          } else if (location && !gps) {
-            this.openGPSSettings();
-          }
+    // PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA).then(res=>console.warn(res))
+    // LocationSettings.isLocationEnabled((gps) => {
+    //   PermissionsAndroid
+    //     .check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
+    //     .then(location => {
+    //       if (!location && !gps) {
+    //         this.openGPSSettings();
+    //         this.openLocationSettings();
+    //       } else if (!location && gps) {
+    //         this.openLocationSettings();
+    //       } else if (location && !gps) {
+    //         this.openGPSSettings();
+    //       }
 
-        })
-    })
+    //     })
+    // })
 
   }
   render() {
