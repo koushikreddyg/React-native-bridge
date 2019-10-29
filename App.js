@@ -19,7 +19,29 @@ export default class App extends Component {
     this.state = { appState: AppState };
   }
   componentDidMount() {
-    TouchId.authenticate().then((res)=>{console.warn(res)}).catch(res=>console.warn(res))
+    NativeModules.LocationSettings.sendData({array: [{
+      name: "Koushik",
+      age: 24,
+      // job:{company: "AT&T", location: 'Plano'}
+    },{
+      name: "yunus",
+      age: 27,
+      job:{company: "AT&T", location: 'Pppp'}
+    }]})
+
+
+    // NativeModules.LocationSettings.arrayForEach().then((res)=>{
+    //   console.warn(res.replace('=',':'))
+      // JSON.parse(res).map((item)=>{
+      //   console.warn(item.name)
+      //   NativeModules.LocationSettings.sendIndObject(item);
+      // })
+    // })
+
+    
+
+    
+    // TouchId.authenticate().then((res)=>{console.warn(res)}).catch(res=>console.warn(res))
     // LocationSettings._startListen();
     // AppState.addEventListener('change', this._handleAppStateChange);
     // // this.checkLocationSettings();
@@ -47,40 +69,14 @@ export default class App extends Component {
   };
 
   checkLocationSettings = () => {
-    // PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA).then(res=>console.warn(res))
-    // LocationSettings.isLocationEnabled((gps) => {
-    //   PermissionsAndroid
-    //     .check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
-    //     .then(location => {
-    //       if (!location && !gps) {
-    //         this.openGPSSettings();
-    //         this.openLocationSettings();
-    //       } else if (!location && gps) {
-    //         this.openLocationSettings();
-    //       } else if (location && !gps) {
-    //         this.openGPSSettings();
-    //       }
 
-    //     })
-    // })
 
   }
   render() {
     // Platform.OS === 'android' ? NativeModules.Counter.show(res => console.warn(res)) : console.warn(NativeModules.Counter)
     return (
       <View style={styles.container}>
-        <View style={styles.top} >
-          <TouchableOpacity>
-            <Text onPress={this.openLocationSettings}>open location settings</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text onPress={this.openGPSSettings}>open GPS settings</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text onPress={this.checkLocationSettings}>check for the location</Text>
-          </TouchableOpacity>
-        </View>
-        {/* <Bulb style={ styles.bottom }  isOn={this.state.isOn} onStatusChange={this._onStatusChange} /> */}
+        <Text>Hi</Text>
       </View>
     );
   }

@@ -7,18 +7,29 @@ import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.Settings;
+import android.util.Log;
 
+import com.facebook.react.bridge.NativeArray;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LocationSettingsModule extends ReactContextBaseJavaModule {
     private final ReactApplicationContext reactContext;
     private static final String EVENT_STATUS_CHANGE = "OnStatusChange";
     private Boolean isReceive = false;
     private BroadcastReceiver mGpsSwitchStateReceiver = null;
+
+    private static String message;
 
     public LocationSettingsModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -33,6 +44,7 @@ public class LocationSettingsModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void show(Callback cb) {
         cb.invoke("Welcome to the application");
+
 
     }
 
@@ -90,6 +102,55 @@ public class LocationSettingsModule extends ReactContextBaseJavaModule {
             }
         } catch (Exception ex) {
         }
+    }
+
+    @ReactMethod
+    public void arrayForEach(Promise promise){
+        HashMap<String, String> map= new HashMap<>();
+
+        String msg= "[{ name= 'Koushik', age=24},{name= 'Yunus', age= 30}]";
+        promise.resolve(message);
+
+    }
+    @ReactMethod
+    public void sendData(ReadableMap str){
+
+
+
+
+
+
+
+        str.getArray("array").toArrayList().forEach(i->{
+            HashMap<String, HashMap<String, String>> mapMap= (HashMap<String, HashMap<String, String>>)i;
+
+            HashMap<String, String> stringMapi= new HashMap<>();
+
+
+
+            for(String kkset: mapMap.keySet()){
+                if(kkset.contains("job")){
+                    stringMapi.put("location",mapMap.get("job").get("location"));
+                    stringMapi.put("comapny",mapMap.get("job").get("company"));
+
+                    Log.i(" Koushik ",""+  stringMapi.get("location"));
+                }
+            }
+
+
+
+        });
+
+
+
+
+
+
+    }
+
+    @ReactMethod
+    public void sendIndObject(ReadableMap obj){
+        Log.i(" "+ obj.toHashMap().get("name")+", your age is ", ""+obj.toHashMap().get("age"));
     }
 
     private final class GPSProvideChangeReceiver extends BroadcastReceiver {
